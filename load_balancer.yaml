@@ -1,0 +1,45 @@
+---
+- name: Gather facts from all servers
+  hosts: all
+  gather_facts: yes
+
+- name: Configure Load Balancer
+  hosts: loadbalancer
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create Load Balancer Config
+      copy:
+        dest: /etc/nginx/sites-available/load_balancer
+        content: |
+          upstream myapp {
+              server {{ hostvars[groups['webservers'][0]]['ansible_host'] | default(groups['webservers'][0]) }};
+              server {{ hostvars[groups['webservers'][1]]['ansible_host'] | default(groups['webservers'][1]) }};
+          }
+
+          server {
+              listen 80;
+              location / {
+                  proxy_pass http://myapp;
+              }
+          }
+
+    - name: Remove default nginx config from enabled
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Enable our Load Balancer config
+      file:
+        src: /etc/nginx/sites-available/load_balancer
+        dest: /etc/nginx/sites-enabled/load_balancer
+        state: link
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
