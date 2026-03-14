@@ -17,9 +17,9 @@ This project demonstrates a robust, automated infrastructure using **Ansible** a
 
 ## How to Run
 1. Clone the repo.
-2. Update `inventory.ini` with your server IPs.
+2. Update `inventory.` with your server IPs.
 3. Run the playbooks:
    ```bash
-   ansible-playbook -i inventory playbook.yml
-   ansible-playbook -i inventory web_servers.yml
-   ansible-playbook -i inventory load_balancer.yml
+   ansible-playbook -i inventory playbook.yaml
+   ansible-playbook -i inventory web_servers.yaml
+   ansible-playbook -i inventory load_balancer.yaml
