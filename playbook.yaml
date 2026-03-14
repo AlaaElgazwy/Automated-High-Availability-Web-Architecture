@@ -1,0 +1,35 @@
+---
+- name: basic servers configuration
+  hosts: all
+  become: true
+  tasks:
+    - name: update apt
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+
+    - name: Install essential tools
+      apt:
+        name:
+          - vim
+          - curl
+          - git
+          - net-tools
+          - htop
+        state: present
+
+    - name: Ensure a group 'sysadmins' exists
+      group:
+        name: sysadmins
+        state: present
+
+    - name: Create a new admin user
+      user:
+        name: alaa_admin
+        group: sysadmins
+        shell: /bin/bash
+        append: yes
