@@ -1,0 +1,11 @@
+[webservers]
+44.215.110.56 
+44.220.83.178 
+[loadbalncer]
+44.213.124.95 
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=/home/alaa/keypass.pem
+
+
