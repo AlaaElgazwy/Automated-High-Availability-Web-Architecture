@@ -1,0 +1,14 @@
+---
+- name: Configure Web Servers
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create a custom index.html
+      copy:
+        content: "<h1>Welcome to Web Server: {{ ansible_hostname }}</h1>"
+        dest: /var/www/html/index.html
